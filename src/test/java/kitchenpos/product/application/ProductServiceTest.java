@@ -1,7 +1,7 @@
 package kitchenpos.product.application;
 
 import kitchenpos.product.domain.Product;
-import kitchenpos.product.domain.ProductDao;
+import kitchenpos.product.domain.ProductRepository;
 import kitchenpos.product.dto.ProductCreateRequest;
 import kitchenpos.product.dto.ProductResponse;
 import org.junit.jupiter.api.DisplayName;
@@ -28,14 +28,14 @@ class ProductServiceTest {
     private ProductService productService;
 
     @Mock
-    private ProductDao productDao;
+    private ProductRepository productDao;
 
     @Test
     @DisplayName("상품을 등록한다.")
     void create() {
         // given
         String name = "후라이드";
-        BigDecimal price = new BigDecimal(16_000);
+        int price = 16_000;
         ProductCreateRequest request = new ProductCreateRequest(name, price);
         Product product = Product.of(name, price);
         given(productDao.save(any())).willReturn(product);
@@ -50,22 +50,10 @@ class ProductServiceTest {
     }
 
     @Test
-    @DisplayName("상품 가격이 없으면 상품을 등록할 수 없다.")
-    void create_null() {
-        // given
-        ProductCreateRequest request = new ProductCreateRequest("후라이드", null);
-
-        // when, then
-        assertThatThrownBy(() -> productService.create(request))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("가격은 0원 이상이어야 합니다.");
-    }
-
-    @Test
     @DisplayName("상품 가격이 0원 이상이 아니면 상품을 등록할 수 없다.")
     void create_negative_price() {
         // given
-        ProductCreateRequest request = new ProductCreateRequest("후라이드", new BigDecimal(-1));
+        ProductCreateRequest request = new ProductCreateRequest("후라이드", -1);
 
         // when, then
         assertThatThrownBy(() -> productService.create(request))
@@ -77,8 +65,8 @@ class ProductServiceTest {
     @DisplayName("상품 목록을 조회한다.")
     void list() {
         // given
-        List<Product> products = new ArrayList<>(Arrays.asList(new Product("후라이드", new BigDecimal(16_000)),
-                new Product("양념치킨", new BigDecimal(16_000))));
+        List<Product> products = new ArrayList<>(Arrays.asList(new Product("후라이드", 16_000),
+                new Product("양념치킨", 16_000)));
         given(productDao.findAll()).willReturn(products);
 
         // when

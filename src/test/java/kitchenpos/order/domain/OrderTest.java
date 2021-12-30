@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,11 +35,11 @@ class OrderTest {
     void constructor_order_table_empty() {
         // given
         MenuGroup menuGroup = MenuGroup.of("두마리메뉴");
-        Product product = Product.of("후라이드", new BigDecimal(16_000));
+        Product product = Product.of("후라이드", 16_000);
 
         List<MenuProduct> menuProducts = new ArrayList<>();
         menuProducts.add(MenuProduct.of(product, 1));
-        Menu menu = Menu.of("후라이드치킨", new BigDecimal(16_000), menuGroup, menuProducts);
+        Menu menu = Menu.of("후라이드치킨", 16_000, menuGroup, menuProducts);
 
         List<OrderLineItem> orderLineItems = new ArrayList<>();
         orderLineItems.add(OrderLineItem.of(menu, 1));
@@ -59,11 +58,11 @@ class OrderTest {
         // given
         MenuGroup menuGroup = MenuGroup.of("두마리메뉴");
 
-        Product product = Product.of("후라이드", new BigDecimal(16_000));
+        Product product = Product.of("후라이드", 16_000);
         List<MenuProduct> menuProducts = new ArrayList<>();
         menuProducts.add(MenuProduct.of(product, 1));
 
-        Menu menu = Menu.of("후라이드치킨", new BigDecimal(16_000), menuGroup, menuProducts);
+        Menu menu = Menu.of("후라이드치킨", 16_000, menuGroup, menuProducts);
 
         List<OrderLineItem> orderLineItems = new ArrayList<>();
         orderLineItems.add(OrderLineItem.of(menu, 1));
@@ -85,11 +84,36 @@ class OrderTest {
         // given
         MenuGroup menuGroup = MenuGroup.of("두마리메뉴");
 
-        Product product = Product.of("후라이드", new BigDecimal(16_000));
+        Product product = Product.of("후라이드", 16_000);
         List<MenuProduct> menuProducts = new ArrayList<>();
         menuProducts.add(MenuProduct.of(product, 1));
 
-        Menu menu = Menu.of("후라이드치킨", new BigDecimal(16_000), menuGroup, menuProducts);
+        Menu menu = Menu.of("후라이드치킨", 16_000, menuGroup, menuProducts);
+
+        List<OrderLineItem> orderLineItems = new ArrayList<>();
+        orderLineItems.add(OrderLineItem.of(menu, 1));
+
+        OrderTable orderTable = OrderTable.of(4, false);
+
+        Order order = Order.of(orderLineItems, orderTable, OrderStatus.MEAL);
+
+        // when, then
+        assertThatThrownBy(() -> order.changeOrderStatus(OrderStatus.COOKING))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("식사 중인 주문을 조리중 상태로 변경할 수 없습니다.");
+    }
+
+    @Test
+    @DisplayName("식사 중인 주문을 조리 중 상태로 변경할 수 없다.")
+    void changeOrderStatus_meal_to_cooking() {
+        // given
+        MenuGroup menuGroup = MenuGroup.of("두마리메뉴");
+
+        Product product = Product.of("후라이드", 16_000);
+        List<MenuProduct> menuProducts = new ArrayList<>();
+        menuProducts.add(MenuProduct.of(product, 1));
+
+        Menu menu = Menu.of("후라이드치킨", 16_000, menuGroup, menuProducts);
 
         List<OrderLineItem> orderLineItems = new ArrayList<>();
         orderLineItems.add(OrderLineItem.of(menu, 1));
@@ -111,11 +135,11 @@ class OrderTest {
         // given
         MenuGroup menuGroup = MenuGroup.of("두마리메뉴");
 
-        Product product = Product.of("후라이드", new BigDecimal(16_000));
+        Product product = Product.of("후라이드", 16_000);
         List<MenuProduct> menuProducts = new ArrayList<>();
         menuProducts.add(MenuProduct.of(product, 1));
 
-        Menu menu = Menu.of("후라이드치킨", new BigDecimal(16_000), menuGroup, menuProducts);
+        Menu menu = Menu.of("후라이드치킨", 16_000, menuGroup, menuProducts);
 
         List<OrderLineItem> orderLineItems = new ArrayList<>();
         orderLineItems.add(OrderLineItem.of(menu, 1));

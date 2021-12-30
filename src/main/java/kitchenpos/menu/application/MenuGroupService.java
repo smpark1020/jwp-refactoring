@@ -1,6 +1,6 @@
 package kitchenpos.menu.application;
 
-import kitchenpos.menu.domain.MenuGroupDao;
+import kitchenpos.menu.domain.MenuGroupRepository;
 import kitchenpos.menu.domain.MenuGroup;
 import kitchenpos.menu.dto.MenuGroupCreateRequest;
 import kitchenpos.menu.dto.MenuGroupResponse;
@@ -12,9 +12,9 @@ import java.util.List;
 @Service
 public class MenuGroupService {
 
-    private final MenuGroupDao menuGroupDao;
+    private final MenuGroupRepository menuGroupDao;
 
-    public MenuGroupService(final MenuGroupDao menuGroupDao) {
+    public MenuGroupService(final MenuGroupRepository menuGroupDao) {
         this.menuGroupDao = menuGroupDao;
     }
 

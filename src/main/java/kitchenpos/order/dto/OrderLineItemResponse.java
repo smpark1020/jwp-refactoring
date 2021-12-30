@@ -9,9 +9,6 @@ public class OrderLineItemResponse {
     private MenuResponse menu;
     private long quantity;
 
-    public OrderLineItemResponse() {
-    }
-
     public OrderLineItemResponse(Long seq, MenuResponse menu, long quantity) {
         this.seq = seq;
         this.menu = menu;

@@ -26,30 +26,22 @@ public class MenuProduct {
     protected MenuProduct() {
     }
 
-    public MenuProduct(long quantity) {
+    public MenuProduct(Menu menu, Product product, long quantity) {
+        this.menu = menu;
+        this.product = product;
         this.quantity = quantity;
     }
 
-    public MenuProduct(Product product, long quantity) {
-        this(quantity);
-        this.product = product;
-    }
-
-    public MenuProduct(Menu menu, Product product, long quantity) {
-        this(product, quantity);
-        this.menu = menu;
-    }
-
     public static MenuProduct of(Product product, long quantity) {
-        return new MenuProduct(product, quantity);
+        return new MenuProduct(null, product, quantity);
     }
 
     public void updateMenu(Menu menu) {
         this.menu = menu;
     }
 
-    public BigDecimal sumProductPrice() {
-        return product.multiplyPrice(BigDecimal.valueOf(this.quantity));
+    public int sumProductPrice() {
+        return product.multiplyPrice(this.quantity).getPrice();
     }
 
     public Long getSeq() {

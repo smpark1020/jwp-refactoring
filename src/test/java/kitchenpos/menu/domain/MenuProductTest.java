@@ -1,5 +1,6 @@
 package kitchenpos.menu.domain;
 
+import kitchenpos.product.domain.Price;
 import kitchenpos.product.domain.Product;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,13 +17,13 @@ class MenuProductTest {
         // given
         int priceValue = 16_000;
         int quantity = 2;
-        Product product = Product.of("후라이드", new BigDecimal(priceValue));
+        Product product = Product.of("후라이드", priceValue);
         MenuProduct menuProduct = MenuProduct.of(product, quantity);
 
         // when
-        BigDecimal result = menuProduct.sumProductPrice();
+        int result = menuProduct.sumProductPrice();
 
         // then
-        assertThat(result).isEqualTo(new BigDecimal(priceValue * quantity));
+        assertThat(result).isEqualTo(priceValue * quantity);
     }
 }

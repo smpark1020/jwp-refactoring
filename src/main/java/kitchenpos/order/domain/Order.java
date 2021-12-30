@@ -5,6 +5,7 @@ import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -75,6 +76,11 @@ public class Order {
         if (Objects.equals(OrderStatus.COMPLETION, this.orderStatus)) {
             throw new IllegalArgumentException("이미 계산 완료된 주문입니다.");
         }
+
+        if (this.orderStatus == OrderStatus.MEAL && orderStatus == OrderStatus.COOKING) {
+            throw new IllegalArgumentException("식사 중인 주문을 조리중 상태로 변경할 수 없습니다.");
+        }
+
         this.orderStatus = orderStatus;
     }
 
@@ -83,6 +89,13 @@ public class Order {
             return true;
         }
         return false;
+    }
+
+    public boolean isContainsOrderStatus(OrderStatus... orderStatus) {
+        return Arrays.stream(orderStatus)
+                .filter(s -> s == this.orderStatus)
+                .findFirst()
+                .isPresent();
     }
 
     public Long getId() {

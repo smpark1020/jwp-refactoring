@@ -31,18 +31,19 @@ public class Menu {
     protected Menu() {
     }
 
-    public Menu(BigDecimal price) {
-        this.price = new Price(price);
-    }
+    public Menu(String name, int price, MenuGroup menuGroup, List<MenuProduct> menuProducts) {
+        int sum = sumMenuProductPrice(menuProducts);
+        if (price > sum) {
+            throw new IllegalArgumentException("메뉴 가격이 메뉴 상품 가격들의 합보다 큽니다.");
+        }
 
-    public Menu(String name, BigDecimal price, MenuGroup menuGroup, List<MenuProduct> menuProducts) {
-        this(price);
+        this.price = new Price(price);
         this.name = name;
         this.menuGroup = menuGroup;
         this.menuProducts = menuProducts;
     }
 
-    public static Menu of(String name, BigDecimal price, MenuGroup menuGroup, List<MenuProduct> menuProducts) {
+    public static Menu of(String name, int price, MenuGroup menuGroup, List<MenuProduct> menuProducts) {
         Menu menu = new Menu(name, price, menuGroup, menuProducts);
         for (MenuProduct menuProduct : menuProducts) {
             menuProduct.updateMenu(menu);
@@ -50,15 +51,15 @@ public class Menu {
         return menu;
     }
 
-    public BigDecimal sumMenuProductPrice() {
-        BigDecimal sum = BigDecimal.ZERO;
+    private int sumMenuProductPrice(List<MenuProduct> menuProducts) {
+        int sum = 0;
         for (MenuProduct menuProduct : menuProducts) {
-            sum = sum.add(menuProduct.sumProductPrice());
+            sum += menuProduct.sumProductPrice();
         }
         return sum;
     }
 
-    public BigDecimal getPriceValue() {
+    public int getPriceValue() {
         return this.price.getPrice();
     }
 

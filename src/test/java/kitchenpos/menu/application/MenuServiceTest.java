@@ -1,12 +1,11 @@
-package kitchenpos.application;
+package kitchenpos.menu.application;
 
-import kitchenpos.menu.application.MenuService;
 import kitchenpos.menu.domain.*;
 import kitchenpos.menu.dto.MenuCreateRequest;
 import kitchenpos.menu.dto.MenuProductCreateRequest;
 import kitchenpos.menu.dto.MenuResponse;
 import kitchenpos.product.domain.Product;
-import kitchenpos.product.domain.ProductDao;
+import kitchenpos.product.domain.ProductRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,16 +31,16 @@ class MenuServiceTest {
     private MenuService menuService;
 
     @Mock
-    private MenuDao menuDao;
+    private MenuRepository menuDao;
 
     @Mock
-    private MenuGroupDao menuGroupDao;
+    private MenuGroupRepository menuGroupDao;
 
     @Mock
-    private MenuProductDao menuProductDao;
+    private MenuProductRepository menuProductDao;
 
     @Mock
-    private ProductDao productDao;
+    private ProductRepository productDao;
 
     @Test
     @DisplayName("메뉴를 등록한다.")
@@ -49,11 +48,11 @@ class MenuServiceTest {
         // given
         MenuProductCreateRequest menuProductCreateRequest = new MenuProductCreateRequest(1);
 
-        MenuCreateRequest menuCreateRequest = new MenuCreateRequest(new BigDecimal(16_000),
+        MenuCreateRequest menuCreateRequest = new MenuCreateRequest(16_000,
                 new ArrayList<>(Arrays.asList(menuProductCreateRequest)));
 
         MenuGroup menuGroup = new MenuGroup("두마리메뉴");
-        Product product = new Product("후라이드", new BigDecimal(16_000));
+        Product product = new Product("후라이드", 16_000);
 
         List<MenuProduct> menuProducts = new ArrayList<>();
         menuProducts.add(menuProductCreateRequest.toEntity(product));
@@ -95,7 +94,7 @@ class MenuServiceTest {
         // given
         MenuGroup menuGroup = new MenuGroup("두마리메뉴");
         MenuProductCreateRequest menuProductCreateRequest = new MenuProductCreateRequest(1);
-        MenuCreateRequest menuCreateRequest = new MenuCreateRequest(new BigDecimal(16_000),
+        MenuCreateRequest menuCreateRequest = new MenuCreateRequest(16_000,
                 new ArrayList<>(Arrays.asList(menuProductCreateRequest)));
 
         given(menuGroupDao.findById(any())).willReturn(Optional.ofNullable(menuGroup));
@@ -108,33 +107,14 @@ class MenuServiceTest {
     }
 
     @Test
-    @DisplayName("메뉴의 가격이 없으면 메뉴를 등록할 수 없다.")
-    void create_price_null() {
-        // given
-        MenuGroup menuGroup = new MenuGroup("두마리메뉴");
-        MenuProductCreateRequest menuProductCreateRequest = new MenuProductCreateRequest(1);
-        MenuCreateRequest menuCreateRequest = new MenuCreateRequest(null,
-                new ArrayList<>(Arrays.asList(menuProductCreateRequest)));
-        Product product = new Product("후라이드", new BigDecimal(16_000));
-
-        given(menuGroupDao.findById(any())).willReturn(Optional.ofNullable(menuGroup));
-        given(productDao.findById(any())).willReturn(Optional.ofNullable(product));
-
-        // when, then
-        assertThatThrownBy(() -> menuService.create(menuCreateRequest))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("가격은 0원 이상이어야 합니다.");
-    }
-
-    @Test
     @DisplayName("메뉴의 가격이 0보다 작으면 메뉴를 등록할 수 없다.")
     void create_price_negative() {
         // given
         MenuGroup menuGroup = new MenuGroup("두마리메뉴");
         MenuProductCreateRequest menuProductCreateRequest = new MenuProductCreateRequest(1);
-        MenuCreateRequest menuCreateRequest = new MenuCreateRequest(new BigDecimal(-1),
+        MenuCreateRequest menuCreateRequest = new MenuCreateRequest(-1,
                 new ArrayList<>(Arrays.asList(menuProductCreateRequest)));
-        Product product = new Product("후라이드", new BigDecimal(16_000));
+        Product product = new Product("후라이드", 16_000);
 
         given(menuGroupDao.findById(any())).willReturn(Optional.ofNullable(menuGroup));
         given(productDao.findById(any())).willReturn(Optional.ofNullable(product));
@@ -151,9 +131,9 @@ class MenuServiceTest {
         // given
         MenuGroup menuGroup = new MenuGroup("두마리메뉴");
         MenuProductCreateRequest menuProductCreateRequest = new MenuProductCreateRequest(1);
-        MenuCreateRequest menuCreateRequest = new MenuCreateRequest(new BigDecimal(17_000),
+        MenuCreateRequest menuCreateRequest = new MenuCreateRequest(17_000,
                 new ArrayList<>(Arrays.asList(menuProductCreateRequest)));
-        Product product = new Product("후라이드", new BigDecimal(16_000));
+        Product product = new Product("후라이드", 16_000);
 
         given(menuGroupDao.findById(any())).willReturn(Optional.ofNullable(menuGroup));
         given(productDao.findById(any())).willReturn(Optional.ofNullable(product));
@@ -169,12 +149,12 @@ class MenuServiceTest {
     void list() {
         // given
         List<MenuProduct> 후라이드_메뉴상품_목록 = new ArrayList<>();
-        후라이드_메뉴상품_목록.add(new MenuProduct(new Product("후라이드", new BigDecimal(16_000)), 1));
-        Menu 후라이드메뉴 = new Menu("후라이드치킨", new BigDecimal(16_000), new MenuGroup("두마리메뉴"), 후라이드_메뉴상품_목록);
+        후라이드_메뉴상품_목록.add(new MenuProduct(null, new Product("후라이드", 16_000), 1));
+        Menu 후라이드메뉴 = new Menu("후라이드치킨", 16_000, new MenuGroup("두마리메뉴"), 후라이드_메뉴상품_목록);
 
         List<MenuProduct> 양념치킨_메뉴상품_목록 = new ArrayList<>();
-        양념치킨_메뉴상품_목록.add(new MenuProduct(new Product("양념치킨", new BigDecimal(16_000)), 1));
-        Menu 양념치킨메뉴 = new Menu("양념치킨", new BigDecimal(16_000), new MenuGroup("두마리메뉴"), 양념치킨_메뉴상품_목록);
+        양념치킨_메뉴상품_목록.add(new MenuProduct(null, new Product("양념치킨", 16_000), 1));
+        Menu 양념치킨메뉴 = new Menu("양념치킨", 16_000, new MenuGroup("두마리메뉴"), 양념치킨_메뉴상품_목록);
 
         List<Menu> menus = new ArrayList<>(Arrays.asList(후라이드메뉴, 양념치킨메뉴));
 

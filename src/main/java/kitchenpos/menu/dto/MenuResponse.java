@@ -3,7 +3,6 @@ package kitchenpos.menu.dto;
 import kitchenpos.menu.domain.Menu;
 import kitchenpos.menu.domain.MenuProduct;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,14 +10,11 @@ public class MenuResponse {
 
     private Long id;
     private String name;
-    private BigDecimal price;
+    private int price;
     private MenuGroupResponse menuGroup;
     private List<MenuProductResponse> menuProducts;
 
-    public MenuResponse() {
-    }
-
-    public MenuResponse(Long id, String name, BigDecimal price, MenuGroupResponse menuGroup, List<MenuProductResponse> menuProducts) {
+    public MenuResponse(Long id, String name, int price, MenuGroupResponse menuGroup, List<MenuProductResponse> menuProducts) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -55,7 +51,7 @@ public class MenuResponse {
         return name;
     }
 
-    public BigDecimal getPrice() {
+    public int getPrice() {
         return price;
     }
 

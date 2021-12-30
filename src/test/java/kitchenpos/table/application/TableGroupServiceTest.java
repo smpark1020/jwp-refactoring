@@ -4,14 +4,14 @@ import kitchenpos.menu.domain.Menu;
 import kitchenpos.menu.domain.MenuGroup;
 import kitchenpos.menu.domain.MenuProduct;
 import kitchenpos.order.domain.Order;
-import kitchenpos.order.domain.OrderDao;
 import kitchenpos.order.domain.OrderLineItem;
+import kitchenpos.order.domain.OrderRepository;
 import kitchenpos.order.domain.OrderStatus;
 import kitchenpos.product.domain.Product;
 import kitchenpos.table.domain.OrderTable;
-import kitchenpos.table.domain.OrderTableDao;
+import kitchenpos.table.domain.OrderTableRepository;
 import kitchenpos.table.domain.TableGroup;
-import kitchenpos.table.domain.TableGroupDao;
+import kitchenpos.table.domain.TableGroupRepository;
 import kitchenpos.table.dto.TableGroupCreateRequest;
 import kitchenpos.table.dto.TableGroupResponse;
 import org.junit.jupiter.api.DisplayName;
@@ -21,8 +21,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -39,13 +37,13 @@ class TableGroupServiceTest {
     private TableGroupService tableGroupService;
 
     @Mock
-    private OrderDao orderDao;
+    private OrderRepository orderDao;
 
     @Mock
-    private OrderTableDao orderTableDao;
+    private OrderTableRepository orderTableDao;
 
     @Mock
-    private TableGroupDao tableGroupDao;
+    private TableGroupRepository tableGroupDao;
 
     @Test
     @DisplayName("단체를 지정한다.")
@@ -180,8 +178,8 @@ class TableGroupServiceTest {
         TableGroup tableGroup = TableGroup.of(orderTables);
 
         List<MenuProduct> menuProducts = new ArrayList<>();
-        menuProducts.add(MenuProduct.of(Product.of("후라이드", new BigDecimal(16_000)), 1));
-        Menu menu = Menu.of("후라이드치킨", new BigDecimal(16_000), MenuGroup.of("두마리메뉴"), menuProducts);
+        menuProducts.add(MenuProduct.of(Product.of("후라이드", 16_000), 1));
+        Menu menu = Menu.of("후라이드치킨", 16_000, MenuGroup.of("두마리메뉴"), menuProducts);
 
         List<OrderLineItem> orderLineItems = new ArrayList<>();
         orderLineItems.add(OrderLineItem.of(menu, 1));
@@ -209,8 +207,8 @@ class TableGroupServiceTest {
         TableGroup tableGroup = TableGroup.of(orderTables);
 
         List<MenuProduct> menuProducts = new ArrayList<>();
-        menuProducts.add(MenuProduct.of(Product.of("후라이드", new BigDecimal(16_000)), 1));
-        Menu menu = Menu.of("후라이드치킨", new BigDecimal(16_000), MenuGroup.of("두마리메뉴"), menuProducts);
+        menuProducts.add(MenuProduct.of(Product.of("후라이드", 16_000), 1));
+        Menu menu = Menu.of("후라이드치킨", 16_000, MenuGroup.of("두마리메뉴"), menuProducts);
 
         List<OrderLineItem> orderLineItems = new ArrayList<>();
         orderLineItems.add(OrderLineItem.of(menu, 1));

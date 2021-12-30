@@ -14,13 +14,14 @@ class ProductTest {
     void multiplyPrice() {
         // given
         int priceValue = 16_000;
-        Product product = Product.of("후라이드", new BigDecimal(priceValue));
+        Product product = Product.of("후라이드", priceValue);
+
+        int inputValue = 2;
 
         // when
-        int inputValue = 2;
-        BigDecimal result = product.multiplyPrice(new BigDecimal(inputValue));
+        Price result = product.multiplyPrice(inputValue);
 
         // then
-        assertThat(result).isEqualTo(new BigDecimal(priceValue * inputValue));
+        assertThat(result).isEqualTo(new Price(priceValue * inputValue));
     }
 }

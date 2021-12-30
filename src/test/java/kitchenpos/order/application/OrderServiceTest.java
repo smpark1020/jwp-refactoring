@@ -1,16 +1,16 @@
 package kitchenpos.order.application;
 
 import kitchenpos.menu.domain.Menu;
-import kitchenpos.menu.domain.MenuDao;
 import kitchenpos.menu.domain.MenuGroup;
 import kitchenpos.menu.domain.MenuProduct;
+import kitchenpos.menu.domain.MenuRepository;
 import kitchenpos.order.domain.*;
 import kitchenpos.order.dto.OrderCreateRequest;
 import kitchenpos.order.dto.OrderLineItemCreateRequest;
 import kitchenpos.order.dto.OrderResponse;
 import kitchenpos.product.domain.Product;
 import kitchenpos.table.domain.OrderTable;
-import kitchenpos.table.domain.OrderTableDao;
+import kitchenpos.table.domain.OrderTableRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,7 +18,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -35,16 +34,16 @@ class OrderServiceTest {
     private OrderService orderService;
 
     @Mock
-    private MenuDao menuDao;
+    private MenuRepository menuDao;
 
     @Mock
-    private OrderDao orderDao;
+    private OrderRepository orderDao;
 
     @Mock
-    private OrderLineItemDao orderLineItemDao;
+    private OrderLineItemRepository orderLineItemDao;
 
     @Mock
-    private OrderTableDao orderTableDao;
+    private OrderTableRepository orderTableDao;
 
     @Test
     @DisplayName("주문을 등록한다.")
@@ -57,8 +56,8 @@ class OrderServiceTest {
 
         OrderTable orderTable = OrderTable.of(4, false);
         List<MenuProduct> menuProducts = new ArrayList<>();
-        menuProducts.add(MenuProduct.of(Product.of("후라이드", new BigDecimal(16_000)), 1));
-        Menu menu = Menu.of("후라이드치킨", new BigDecimal(16_000), MenuGroup.of("두마리메뉴"), menuProducts);
+        menuProducts.add(MenuProduct.of(Product.of("후라이드", 16_000), 1));
+        Menu menu = Menu.of("후라이드치킨", 16_000, MenuGroup.of("두마리메뉴"), menuProducts);
 
         List<OrderLineItem> orderLineItems = new ArrayList<>();
         orderLineItems.add(OrderLineItem.of(menu, 1));
@@ -122,7 +121,7 @@ class OrderServiceTest {
 
         OrderTable orderTable = OrderTable.of(4, false);
         List<MenuProduct> menuProducts = new ArrayList<>();
-        menuProducts.add(MenuProduct.of(Product.of("후라이드", new BigDecimal(16_000)), 1));
+        menuProducts.add(MenuProduct.of(Product.of("후라이드", 16_000), 1));
 
         given(orderTableDao.findById(any())).willReturn(Optional.ofNullable(orderTable));
 
@@ -143,8 +142,8 @@ class OrderServiceTest {
 
         OrderTable orderTable = OrderTable.of(4, true);
         List<MenuProduct> menuProducts = new ArrayList<>();
-        menuProducts.add(MenuProduct.of(Product.of("후라이드", new BigDecimal(16_000)), 1));
-        Menu menu = Menu.of("후라이드치킨", new BigDecimal(16_000), MenuGroup.of("두마리메뉴"), menuProducts);
+        menuProducts.add(MenuProduct.of(Product.of("후라이드", 16_000), 1));
+        Menu menu = Menu.of("후라이드치킨", 16_000, MenuGroup.of("두마리메뉴"), menuProducts);
 
 
         List<OrderLineItem> orderLineItems = new ArrayList<>();
@@ -165,8 +164,8 @@ class OrderServiceTest {
         // given
         OrderTable orderTable = OrderTable.of(4, false);
         List<MenuProduct> menuProducts = new ArrayList<>();
-        menuProducts.add(MenuProduct.of(Product.of("후라이드", new BigDecimal(16_000)), 1));
-        Menu menu = Menu.of("후라이드치킨", new BigDecimal(16_000), MenuGroup.of("두마리메뉴"), menuProducts);
+        menuProducts.add(MenuProduct.of(Product.of("후라이드", 16_000), 1));
+        Menu menu = Menu.of("후라이드치킨", 16_000, MenuGroup.of("두마리메뉴"), menuProducts);
 
 
         List<OrderLineItem> orderLineItems = new ArrayList<>();
@@ -192,8 +191,8 @@ class OrderServiceTest {
         // given
         OrderTable orderTable = OrderTable.of(4, false);
         List<MenuProduct> menuProducts = new ArrayList<>();
-        menuProducts.add(MenuProduct.of(Product.of("후라이드", new BigDecimal(16_000)), 1));
-        Menu menu = Menu.of("후라이드치킨", new BigDecimal(16_000), MenuGroup.of("두마리메뉴"), menuProducts);
+        menuProducts.add(MenuProduct.of(Product.of("후라이드", 16_000), 1));
+        Menu menu = Menu.of("후라이드치킨", 16_000, MenuGroup.of("두마리메뉴"), menuProducts);
 
 
         List<OrderLineItem> orderLineItems = new ArrayList<>();
@@ -231,9 +230,8 @@ class OrderServiceTest {
         // given
         OrderTable orderTable = OrderTable.of(4, false);
         List<MenuProduct> menuProducts = new ArrayList<>();
-        menuProducts.add(MenuProduct.of(Product.of("후라이드", new BigDecimal(16_000)), 1));
-        Menu menu = Menu.of("후라이드치킨", new BigDecimal(16_000), MenuGroup.of("두마리메뉴"), menuProducts);
-
+        menuProducts.add(MenuProduct.of(Product.of("후라이드", 16_000), 1));
+        Menu menu = Menu.of("후라이드치킨", 16_000, MenuGroup.of("두마리메뉴"), menuProducts);
 
         List<OrderLineItem> orderLineItems = new ArrayList<>();
         orderLineItems.add(OrderLineItem.of(menu, 1));

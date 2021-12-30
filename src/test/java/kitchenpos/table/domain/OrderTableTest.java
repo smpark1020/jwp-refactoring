@@ -61,11 +61,11 @@ class OrderTableTest {
         // given
         MenuGroup menuGroup = MenuGroup.of("두마리메뉴");
 
-        Product product = Product.of("후라이드", new BigDecimal(16_000));
+        Product product = Product.of("후라이드", 16_000);
         List<MenuProduct> menuProducts = new ArrayList<>();
         menuProducts.add(MenuProduct.of(product, 1));
 
-        Menu menu = Menu.of("후라이드치킨", new BigDecimal(16_000), menuGroup, menuProducts);
+        Menu menu = Menu.of("후라이드치킨", 16_000, menuGroup, menuProducts);
 
         List<OrderLineItem> orderLineItems = new ArrayList<>();
         orderLineItems.add(OrderLineItem.of(menu, 1));
@@ -139,11 +139,11 @@ class OrderTableTest {
         // given
         MenuGroup menuGroup = MenuGroup.of("두마리메뉴");
 
-        Product product = Product.of("후라이드", new BigDecimal(16_000));
+        Product product = Product.of("후라이드", 16_000);
         List<MenuProduct> menuProducts = new ArrayList<>();
         menuProducts.add(MenuProduct.of(product, 1));
 
-        Menu menu = Menu.of("후라이드치킨", new BigDecimal(16_000), menuGroup, menuProducts);
+        Menu menu = Menu.of("후라이드치킨", 16_000, menuGroup, menuProducts);
 
         List<OrderLineItem> orderLineItems = new ArrayList<>();
         orderLineItems.add(OrderLineItem.of(menu, 1));
@@ -169,11 +169,11 @@ class OrderTableTest {
         // given
         MenuGroup menuGroup = MenuGroup.of("두마리메뉴");
 
-        Product product = Product.of("후라이드", new BigDecimal(16_000));
+        Product product = Product.of("후라이드", 16_000);
         List<MenuProduct> menuProducts = new ArrayList<>();
         menuProducts.add(MenuProduct.of(product, 1));
 
-        Menu menu = Menu.of("후라이드치킨", new BigDecimal(16_000), menuGroup, menuProducts);
+        Menu menu = Menu.of("후라이드치킨", 16_000, menuGroup, menuProducts);
 
         List<OrderLineItem> orderLineItems = new ArrayList<>();
         orderLineItems.add(OrderLineItem.of(menu, 1));

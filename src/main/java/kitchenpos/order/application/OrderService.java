@@ -1,34 +1,30 @@
 package kitchenpos.order.application;
 
 import kitchenpos.menu.domain.Menu;
-import kitchenpos.menu.domain.MenuDao;
+import kitchenpos.menu.domain.MenuRepository;
 import kitchenpos.order.domain.*;
 import kitchenpos.order.dto.OrderCreateRequest;
 import kitchenpos.order.dto.OrderLineItemCreateRequest;
 import kitchenpos.order.dto.OrderResponse;
 import kitchenpos.table.domain.OrderTable;
-import kitchenpos.table.domain.OrderTableDao;
+import kitchenpos.table.domain.OrderTableRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Service
 public class OrderService {
-    private final MenuDao menuDao;
-    private final OrderDao orderDao;
-    private final OrderLineItemDao orderLineItemDao;
-    private final OrderTableDao orderTableDao;
+    private final MenuRepository menuDao;
+    private final OrderRepository orderDao;
+    private final OrderLineItemRepository orderLineItemDao;
+    private final OrderTableRepository orderTableDao;
 
     public OrderService(
-            final MenuDao menuDao,
-            final OrderDao orderDao,
-            final OrderLineItemDao orderLineItemDao,
-            final OrderTableDao orderTableDao
+            final MenuRepository menuDao,
+            final OrderRepository orderDao,
+            final OrderLineItemRepository orderLineItemDao,
+            final OrderTableRepository orderTableDao
     ) {
         this.menuDao = menuDao;
         this.orderDao = orderDao;
@@ -41,8 +37,8 @@ public class OrderService {
         final OrderTable orderTable = orderTableDao.findById(orderCreateRequest.getOrderTableId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 주문 테이블입니다."));
 
-        List<OrderLineItem> orderLineItems = createOrderLineItem(orderCreateRequest.getOrderLineItemCreateRequests());
-        Order order = orderCreateRequest.toEntity(orderLineItems, orderTable);
+        Map<Long, Menu> menus = findMenusByMenuId(orderCreateRequest.getOrderLineItemCreateRequests());
+        Order order = orderCreateRequest.toEntity(menus, orderTable);
         final Order savedOrder = orderDao.save(order);
         return OrderResponse.of(savedOrder);
     }
@@ -61,13 +57,13 @@ public class OrderService {
         return OrderResponse.of(savedOrder);
     }
 
-    private List<OrderLineItem> createOrderLineItem(List<OrderLineItemCreateRequest> orderLineItemCreateRequests) {
-        List<OrderLineItem> orderLineItems = new ArrayList<>();
-        for (OrderLineItemCreateRequest orderLineItemCreateRequest : orderLineItemCreateRequests) {
-            Menu menu = menuDao.findById(orderLineItemCreateRequest.getMenuId())
+    private Map<Long, Menu> findMenusByMenuId(List<OrderLineItemCreateRequest> orderLineItemCreateRequests) {
+        Map<Long, Menu> menus = new HashMap<>();
+        for (OrderLineItemCreateRequest request : orderLineItemCreateRequests) {
+            Menu menu = menuDao.findById(request.getMenuId())
                     .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 메뉴가 포함되어 있습니다."));
-            orderLineItems.add(OrderLineItem.of(menu, orderLineItemCreateRequest.getQuantity()));
+            menus.put(menu.getId(), menu);
         }
-        return orderLineItems;
+        return menus;
     }
 }

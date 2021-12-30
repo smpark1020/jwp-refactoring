@@ -69,8 +69,7 @@ public class OrderTable {
             return;
         }
 
-        if (this.order.isEqualToOrderStatus(OrderStatus.COOKING) ||
-                this.order.isEqualToOrderStatus(OrderStatus.MEAL)) {
+        if (this.order.isContainsOrderStatus(OrderStatus.COOKING, OrderStatus.MEAL)) {
             throw new IllegalArgumentException("조리 또는 식사 중이면 빈 테이블로 변경할 수 없습니다.");
         }
 
